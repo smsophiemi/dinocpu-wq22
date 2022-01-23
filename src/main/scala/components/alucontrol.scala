@@ -28,48 +28,53 @@ class ALUControl extends Module {
     val operation = Output(UInt(5.W))
   })
 
-  // Your code goes here
-  when (io.funct7 === "b0000000".U && io.funct3 === "b000".U) { // add*
-    when (io.wordinst === true.B) {    // addw
-      io.operation := "b10111".U
-    } .otherwise {    //add
-      io.operation := "b00111".U
+  when (io.funct3 === "b000".U) {
+    when (io.funct7 === "b0000000".U) {
+      when (io.wordinst) {
+        io.operation := "b10111".U // addw
+      } .otherwise {
+        io.operation := "b00111".U // add
+      }
+    } .elsewhen (io.funct7 === "b0100000".U) {
+	  when (io.wordinst) {
+        io.operation := "b10100".U // subw
+      } .otherwise {
+        io.operation := "b00100".U // sub
+      }
+    } .otherwise {
+      io.operation := "b11111".U // invalid operation
     }
-  } .elsewhen (io.funct7 === "b0100000".U && io.funct3 === "b000".U) {   // sub*
-    when (io.wordinst === true.B) {    // subw
-      io.operation := "b10100".U
-    } .otherwise {    //sub
-      io.operation := "b00100".U
+  } .elsewhen (io.funct3 === "b001".U) {
+    when (io.wordinst) {
+      io.operation := "b11000".U // sllw
+    } .otherwise {
+      io.operation := "b01000".U // sll
     }
-  } .elsewhen (io.funct7 === "b0000000".U && io.funct3 === "b001".U) {   // sll*
-    when (io.wordinst === true.B) {    // sllw
-      io.operation := "b11000".U
-    } .otherwise {    // sll
-      io.operation := "b01000".U
+  } .elsewhen (io.funct3 === "b010".U) {
+    io.operation := "b01001".U // slt
+  } .elsewhen (io.funct3 === "b011".U) {
+    io.operation := "b00001".U // sltu
+  } .elsewhen (io.funct3 === "b100".U) {
+    io.operation := "b00000".U // xor
+  } .elsewhen (io.funct3 === "b101".U) {
+    when (io.funct7 === "b0000000".U) {
+      when (io.wordinst) {
+        io.operation := "b10010".U // srlw
+      } .otherwise {
+        io.operation := "b00010".U // srl
+      }
+    } .elsewhen (io.funct7 === "b0100000".U) {
+      when (io.wordinst) {
+        io.operation := "b10011".U // sraw
+      } .otherwise {
+        io.operation := "b00011".U // sra
+      }
+    } .otherwise {
+      io.operation := "b11111".U // invalid operation
     }
-  } .elsewhen (io.funct7 === "b0000000".U && io.funct3 === "b010".U) {   // slt
-    io.operation := "b01001".U
-  } .elsewhen (io.funct7 === "b0000000".U && io.funct3 === "b011".U) {   // sltu
-    io.operation := "b00001".U
-  } .elsewhen (io.funct7 === "b0000000".U && io.funct3 === "b100".U) {   // xor
-    io.operation := "b00000".U
-  } .elsewhen (io.funct7 === "b0000000".U && io.funct3 === "b101".U) {   // srl*
-    when (io.wordinst === true.B) {    // srlw
-      io.operation := "b10010".U
-    } .otherwise {    //srl
-      io.operation := "b00010".U
-    }
-  } .elsewhen (io.funct7 === "b0100000".U && io.funct3 === "b101".U) {   // sra*
-    when (io.wordinst === true.B) {    // sraw
-      io.operation := "b10011".U
-    } .otherwise {    // sra
-      io.operation := "b00011".U
-    }
-  } .elsewhen (io.funct7 === "b0000000".U && io.funct3 === "b110".U) {   // or
-    io.operation := "b00101".U
-  } .elsewhen (io.funct7 === "b0000000".U && io.funct3 === "b111".U) {   // and
-    io.operation := "b00110".U
-  } .otherwise {
-    io.operation := "b11111".U // invalid operation
+  } .elsewhen (io.funct3 === "b110".U) {
+    io.operation := "b00101".U // or
+  } .otherwise { // b111
+    io.operation := "b00110".U // and
   }
 }
