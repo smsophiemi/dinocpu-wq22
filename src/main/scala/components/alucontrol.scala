@@ -61,13 +61,13 @@ class ALUControl extends Module {
     } .elsewhen (io.funct3 === "b100".U) {
       io.operation := "b00000".U // xor
     } .elsewhen (io.funct3 === "b101".U) {
-      when (io.funct7 === "b0000000".U) {
+      when (io.funct7(6,1) === "b0000000".U) {
         when (io.wordinst) {
           io.operation := "b10010".U // srlw
         } .otherwise {
           io.operation := "b00010".U // srl
         }
-      } .elsewhen (io.funct7 === "b0100000".U) {
+      } .elsewhen (io.funct7(6,1) === "b0100000".U) {
         when (io.wordinst) {
           io.operation := "b10011".U // sraw
         } .otherwise {
