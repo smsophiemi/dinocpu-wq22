@@ -39,13 +39,19 @@ class HazardUnit extends Module {
     val if_id_flush  = Output(Bool())
   })
 
-  // default
-  io.pcfromtaken  := false.B
+  io.pcfromtaken  := Mux(io.exmem_taken, true.B, false.B)
   io.pcstall      := false.B
   io.if_id_stall  := false.B
-  io.id_ex_flush  := false.B
-  io.ex_mem_flush := false.B
-  io.if_id_flush  := false.B
+  io.id_ex_flush  := Mux(io.exmem_taken, true.B, false.B)
+  io.ex_mem_flush := Mux(io.exmem_taken, true.B, false.B)
+  io.if_id_flush  := Mux(io.exmem_taken, true.B, false.B)
 
-  // Your code goes here
+  when(io.idex_memread === true.B){
+    when(io.rs1 === io.idex_rd || io.rs2 === io.idex_rd){
+      io.pcstall := true.B
+      io.if_id_stall := true.B
+      io.id_ex_flush := true.B
+    }
+  }
+
 }
