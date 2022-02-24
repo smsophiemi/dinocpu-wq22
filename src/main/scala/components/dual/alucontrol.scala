@@ -1,6 +1,6 @@
 // This file contains ALU control logic.
 
-package dinocpu.components
+package dinocpu.components.dual
 
 import chisel3._
 import chisel3.util._
@@ -29,10 +29,6 @@ class ALUControl extends Module {
     val operation = Output(UInt(5.W))
   })
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> upstream/lab3-solution
   when (io.aluop === 0.U) {
     io.operation := "b00111".U // add
   } .otherwise {
@@ -44,11 +40,7 @@ class ALUControl extends Module {
           io.operation := "b00111".U // add
         }
       } .elsewhen (io.funct7 === "b0100000".U) {
-<<<<<<< HEAD
-        when (io.wordinst) {
-=======
 		when (io.wordinst) {
->>>>>>> upstream/lab3-solution
           io.operation := "b10100".U // subw
         } .otherwise {
           io.operation := "b00100".U // sub
@@ -69,21 +61,13 @@ class ALUControl extends Module {
     } .elsewhen (io.funct3 === "b100".U) {
       io.operation := "b00000".U // xor
     } .elsewhen (io.funct3 === "b101".U) {
-<<<<<<< HEAD
-      when (io.funct7(6,1) === "b000000".U) {
-=======
-      when (io.funct7(6,1) === "b0000000".U) {
->>>>>>> upstream/lab3-solution
+      when (io.funct7 === "b0000000".U) {
         when (io.wordinst) {
           io.operation := "b10010".U // srlw
         } .otherwise {
           io.operation := "b00010".U // srl
         }
-<<<<<<< HEAD
-      } .elsewhen (io.funct7(6,1) === "b010000".U) {
-=======
-      } .elsewhen (io.funct7(6,1) === "b0100000".U) {
->>>>>>> upstream/lab3-solution
+      } .elsewhen (io.funct7 === "b0100000".U) {
         when (io.wordinst) {
           io.operation := "b10011".U // sraw
         } .otherwise {
@@ -97,58 +81,5 @@ class ALUControl extends Module {
     } .otherwise { // b111
       io.operation := "b00110".U // and
     }
-<<<<<<< HEAD
-=======
-  when (io.funct3 === "b000".U) {
-    when (io.funct7 === "b0000000".U) {
-      when (io.wordinst) {
-        io.operation := "b10111".U // addw
-      } .otherwise {
-        io.operation := "b00111".U // add
-      }
-    } .elsewhen (io.funct7 === "b0100000".U) {
-	  when (io.wordinst) {
-        io.operation := "b10100".U // subw
-      } .otherwise {
-        io.operation := "b00100".U // sub
-      }
-    } .otherwise {
-      io.operation := "b11111".U // invalid operation
-    }
-  } .elsewhen (io.funct3 === "b001".U) {
-    when (io.wordinst) {
-      io.operation := "b11000".U // sllw
-    } .otherwise {
-      io.operation := "b01000".U // sll
-    }
-  } .elsewhen (io.funct3 === "b010".U) {
-    io.operation := "b01001".U // slt
-  } .elsewhen (io.funct3 === "b011".U) {
-    io.operation := "b00001".U // sltu
-  } .elsewhen (io.funct3 === "b100".U) {
-    io.operation := "b00000".U // xor
-  } .elsewhen (io.funct3 === "b101".U) {
-    when (io.funct7 === "b0000000".U) {
-      when (io.wordinst) {
-        io.operation := "b10010".U // srlw
-      } .otherwise {
-        io.operation := "b00010".U // srl
-      }
-    } .elsewhen (io.funct7 === "b0100000".U) {
-      when (io.wordinst) {
-        io.operation := "b10011".U // sraw
-      } .otherwise {
-        io.operation := "b00011".U // sra
-      }
-    } .otherwise {
-      io.operation := "b11111".U // invalid operation
-    }
-  } .elsewhen (io.funct3 === "b110".U) {
-    io.operation := "b00101".U // or
-  } .otherwise { // b111
-    io.operation := "b00110".U // and
->>>>>>> 391f96de57a9766a2aedafc6dc01aa12312dd210
-=======
->>>>>>> upstream/lab3-solution
   }
 }
