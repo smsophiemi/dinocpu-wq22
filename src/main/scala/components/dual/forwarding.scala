@@ -22,13 +22,13 @@ import chisel3._
  * Input:  wb_pipeB_rd,  writeback stage pipeB destination register
  * Input:  wb_pipeB_rw,  True if writeback stage pipeB writes back to register file
  *
- * Output: pipeA_forwardA, 0, don't forward
+ * Output: pipeA_forward1, 0, don't forward
  *                         1, forward from mem stage pipeA
  *                         2, forward from mem stage pipeB
  *                         3, forward from wb stage pipeA
  *                         4, forward from wb stage pipeB
  *                         This is used for the "readdata1" forwarding
- * Output: pipeA_forwardB, 0, don't forward
+ * Output: pipeA_forward2, 0, don't forward
  *                         1, forward from mem stage pipeA
  *                         2, forward from mem stage pipeB
  *                         3, forward from wb stage pipeA
@@ -75,22 +75,33 @@ class ForwardingUnit extends Module {
     val pipeB_forward2 = Output(UInt(3.W))
   })
 
+  // check if pipe B depends on pipe A
+
   // pipeA_forward1
-  io.pipeA_forward1 := 0.U
+  //io.pipeA_forward1 := 0.U
 
-
-
+  when (io.mem_pipeA_rw === true.B && io.mem_pipeA_rd === io.ex_pipeA_rs1 && io.mem_pipeA_rd =/= 0.U) {
+    io.pipeA_forward1 := 1.U
+  }
+  
   // pipeA_forward2
-  io.pipeA_forward2 := 0.U
+  //io.pipeA_forward2 := 0.U
 
-
+  when (io.mem_pipeA_rw === true.B && io.mem_pipeA_rd === io.ex_pipeA_rs2 && io.mem_pipeA_rd =/= 0.U) {
+    io.pipeA_forward2 := 3.U
+  }
 
   // pipeB_forward1
   io.pipeB_forward1 := 0.U
 
-
+  when (io.mem_pipeB_rw === true.B && io.mem_pipeB_rd === io.ex_pipeB_rs1 && io.mem_pipeB_rd =/= 0.U) {
+    io.pipeB_forward1 := 2.U
+  }
 
   // pipeB_forward2
   io.pipeB_forward2 := 0.U
 
+  when (io.mem_pipeB_rw === true.B && io.mem_pipeB_rd === io.ex_pipeB_rs2 && io.mem_pipeB_rd =/= 0.U) {
+    io.pipeB_forward1 := 4.U
+  }
 }

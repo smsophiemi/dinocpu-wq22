@@ -24,14 +24,11 @@ class SingleCycleCPU(implicit val conf: CPUConfig) extends BaseCPU {
   val pcAdder    = Module(new Adder())
   val (cycleCount, _) = Counter(true.B, 1 << 30)
 
-<<<<<<< HEAD
-=======
   // Should be removed when wired are connected
   immGen.io     := DontCare
   nextpc.io     := DontCare
   io.dmem       := DontCare
 
->>>>>>> 391f96de57a9766a2aedafc6dc01aa12312dd210
   //FETCH
   io.imem.address := pc
   io.imem.valid := true.B
@@ -81,9 +78,6 @@ class SingleCycleCPU(implicit val conf: CPUConfig) extends BaseCPU {
   io.dmem.sext := ~funct3(2)
   io.dmem.writedata := registers.io.readdata2
 
-<<<<<<< HEAD
-  pc := nextpc.io.nextpc
-=======
   control.io.opcode := instruction(6, 0)
 
   registers.io.readreg1 := instruction(19, 15)
@@ -110,7 +104,6 @@ class SingleCycleCPU(implicit val conf: CPUConfig) extends BaseCPU {
   pcAdder.io.inputx := pc
   pcAdder.io.inputy := 4.U
   pc := pcAdder.io.result
->>>>>>> 391f96de57a9766a2aedafc6dc01aa12312dd210
 }
 
 /*
